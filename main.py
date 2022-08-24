@@ -12,16 +12,18 @@ from functools import wraps
 import os
 
 app = Flask(__name__)
+# app.config['SECRET_KEY'] = "keykey"
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
-## CONNECT TO DB
+# CONNECT TO DB
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+
 ## CHANGE DATABASE
 prodURI = os.environ.get("DATABASE_URL")
 prodURI = prodURI.replace("postgres://", "postgresql://")
-app.config['SQLALCHEMY_DATABASE_URI'] = prodURI, "sqlite:///blog.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(prodURI, "sqlite:///blog.db")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)

@@ -21,7 +21,7 @@ Bootstrap(app)
 ## CHANGE DATABASE
 prodURI = os.environ.get("DATABASE_URL")
 prodURI = prodURI.replace("postgres://", "postgresql://")
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(prodURI, "sqlite:///blog.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = prodURI, "sqlite:///blog.db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)

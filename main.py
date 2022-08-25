@@ -12,8 +12,12 @@ from functools import wraps
 import os
 
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = "keykey"
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+
+if os.environ.get("SECRET_KEY") is not None:
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+else:
+    app.config['SECRET_KEY'] = "mylocalkey"
+
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -22,8 +26,16 @@ Bootstrap(app)
 
 ## CHANGE DATABASE
 prodURI = os.environ.get("DATABASE_URL")
-prodURI = prodURI.replace("postgres://", "postgresql://")
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(prodURI, "sqlite:///blog.db")
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(prodURI, "sqlite:///blog.db")
+
+if prodURI is not None:
+    prodURI = prodURI.replace("postgres://", "postgresql://")
+    app.config['SQLALCHEMY_DATABASE_URI'] = prodURI
+    print(prodURI)
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///blog.db"
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
